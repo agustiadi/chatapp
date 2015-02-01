@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		A841CC7D1A7E548B007B0FDE /* ProfilePicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A841CC7C1A7E548B007B0FDE /* ProfilePicViewController.swift */; };
 		A841CC7F1A7E55A0007B0FDE /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = A841CC7E1A7E55A0007B0FDE /* placeholder.png */; };
+		A841CC811A7E67CC007B0FDE /* UserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A841CC801A7E67CC007B0FDE /* UserTableViewController.swift */; };
+		A841CC851A7E6AB9007B0FDE /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A841CC841A7E6AB9007B0FDE /* UserTableViewCell.swift */; };
 		A8EEC2161A7C54B200E6A031 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EEC2151A7C54B200E6A031 /* AppDelegate.swift */; };
-		A8EEC2181A7C54B200E6A031 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EEC2171A7C54B200E6A031 /* ViewController.swift */; };
+		A8EEC2181A7C54B200E6A031 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EEC2171A7C54B200E6A031 /* LoginViewController.swift */; };
 		A8EEC21B1A7C54B200E6A031 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8EEC2191A7C54B200E6A031 /* Main.storyboard */; };
 		A8EEC21D1A7C54B200E6A031 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8EEC21C1A7C54B200E6A031 /* Images.xcassets */; };
 		A8EEC2201A7C54B200E6A031 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8EEC21E1A7C54B200E6A031 /* LaunchScreen.xib */; };
@@ -43,10 +45,12 @@
 /* Begin PBXFileReference section */
 		A841CC7C1A7E548B007B0FDE /* ProfilePicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePicViewController.swift; sourceTree = "<group>"; };
 		A841CC7E1A7E55A0007B0FDE /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder.png; path = "../../iOS Swift/InstaInsta/InstaInsta/placeholder.png"; sourceTree = "<group>"; };
+		A841CC801A7E67CC007B0FDE /* UserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewController.swift; sourceTree = "<group>"; };
+		A841CC841A7E6AB9007B0FDE /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		A8EEC2101A7C54B200E6A031 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8EEC2141A7C54B200E6A031 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A8EEC2151A7C54B200E6A031 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A8EEC2171A7C54B200E6A031 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A8EEC2171A7C54B200E6A031 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A8EEC21A1A7C54B200E6A031 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A8EEC21C1A7C54B200E6A031 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A8EEC21F1A7C54B200E6A031 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -126,8 +130,10 @@
 				A841CC7E1A7E55A0007B0FDE /* placeholder.png */,
 				A8EEC2391A7C556800E6A031 /* Frameworks */,
 				A8EEC2151A7C54B200E6A031 /* AppDelegate.swift */,
-				A8EEC2171A7C54B200E6A031 /* ViewController.swift */,
+				A8EEC2171A7C54B200E6A031 /* LoginViewController.swift */,
 				A841CC7C1A7E548B007B0FDE /* ProfilePicViewController.swift */,
+				A841CC801A7E67CC007B0FDE /* UserTableViewController.swift */,
+				A841CC841A7E6AB9007B0FDE /* UserTableViewCell.swift */,
 				A8EEC2191A7C54B200E6A031 /* Main.storyboard */,
 				A8EEC21C1A7C54B200E6A031 /* Images.xcassets */,
 				A8EEC21E1A7C54B200E6A031 /* LaunchScreen.xib */,
@@ -283,9 +289,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8EEC2181A7C54B200E6A031 /* ViewController.swift in Sources */,
+				A8EEC2181A7C54B200E6A031 /* LoginViewController.swift in Sources */,
 				A8EEC2161A7C54B200E6A031 /* AppDelegate.swift in Sources */,
+				A841CC811A7E67CC007B0FDE /* UserTableViewController.swift in Sources */,
 				A841CC7D1A7E548B007B0FDE /* ProfilePicViewController.swift in Sources */,
+				A841CC851A7E6AB9007B0FDE /* UserTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

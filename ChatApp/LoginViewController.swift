@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class LoginViewController: UIViewController {
     
     var signupActive = false
     
@@ -52,7 +52,6 @@ class ViewController: UIViewController {
                 user.signUpInBackgroundWithBlock {
                     (succeeded: Bool!, signupError: NSError!) -> Void in
                     if signupError == nil {
-                        println("Successfully signed up")
                         self.performSegueWithIdentifier("profilePic", sender: self)
                     } else {
                         if let errorString = signupError.userInfo?["error"] as? NSString{
