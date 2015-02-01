@@ -482,6 +482,7 @@
 				A8EEC2311A7C54B300E6A031 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A8EEC2321A7C54B300E6A031 /* Build configuration list for PBXNativeTarget "ChatAppTests" */ = {
 			isa = XCConfigurationList;
@@ -490,6 +491,7 @@
 				A8EEC2341A7C54B300E6A031 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
