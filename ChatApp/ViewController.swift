@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    //testing Github
+    
     var signupActive = false
     
     // Setting up IB Outlet connections for labels and buttons
