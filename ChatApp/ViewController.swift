@@ -10,8 +10,6 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    //testing Github
-    
     var signupActive = false
     
     // Setting up IB Outlet connections for labels and buttons
@@ -55,7 +53,7 @@ class ViewController: UIViewController {
                     (succeeded: Bool!, signupError: NSError!) -> Void in
                     if signupError == nil {
                         println("Successfully signed up")
-                        self.jumpToUserTable()
+                        self.performSegueWithIdentifier("profilePic", sender: self)
                     } else {
                         if let errorString = signupError.userInfo?["error"] as? NSString{
                             self.displayAlert("Error in Form", message: errorString)
@@ -97,7 +95,7 @@ class ViewController: UIViewController {
     func jumpToUserTable() {
         
         if PFUser.currentUser() != nil {
-            performSegueWithIdentifier("login", sender: self)
+            performSegueWithIdentifier("userTable", sender: self)
         }
     }
 
