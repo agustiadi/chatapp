@@ -9,15 +9,33 @@
 import UIKit
 
 class UserTableViewController: UITableViewController {
+
+    var name = [String]()
+    var image = [PFFile]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var userQuery = PFQuery(className: "_User")
+        userQuery.findObjectsInBackgroundWithBlock({
+            (users: [AnyObject]!, error: NSError!) -> Void in
+            
+            self.image.removeAll(keepCapacity: true)
+            self.name.removeAll(keepCapacity: true)
+            
+            if error == nil {
+                
+                for user in users {
+                    self.name.append(user.username)
+                    self.image.append(user["profilePic"] as PFFile)
+                }
+                self.tableView.reloadData()
+            } else {
+                println(error)
+            }
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        })
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,15 +54,28 @@ class UserTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return 5
+        return name.count
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UserTableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UserTableViewCell
 
-        cell.profileImage.image = UIImage(named: "mickey")
-        cell.profileName.text = "Mickey"
+        cell.profileName.text = name[indexPath.row]
+        
+        // Extracting UIImage from PFFile
+        let imageFile = image[indexPath.row]
+        imageFile.getDataInBackgroundWithBlock{
+            (imageData: NSData!, error: NSError!) -> Void in
+            
+            if error == nil {
+                let image = UIImage(data: imageData)
+                cell.profileImage.image = image
+            }else {
+                println(error)
+            }
+        }
+        
         
         return cell
     }
