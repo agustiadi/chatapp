@@ -87,8 +87,11 @@ class UserTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        chattingWith = email[indexPath.row]
-        performSegueWithIdentifier("chatRoom", sender: self)
+        
+        var cell = tableView.cellForRowAtIndexPath(indexPath) as UserTableViewCell
+        otherName = name[indexPath.row]
+        otherEmail = email[indexPath.row]
+        self.performSegueWithIdentifier("chatRoom", sender: self)
     }
     
     

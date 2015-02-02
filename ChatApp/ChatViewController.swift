@@ -8,17 +8,46 @@
 
 import UIKit
 
-var chattingWith: String = ""
+var otherName: String = ""
+var otherEmail: String = ""
 
 class ChatViewController: UIViewController {
-    @IBOutlet weak var chatWithLabel: UILabel!
+
+    @IBOutlet weak var chatScrollView: UIScrollView!
+    @IBOutlet weak var lineLabel: UILabel!
+    @IBOutlet weak var frameMessageView: UIView!
+    @IBOutlet weak var textMessageView: UITextView!
+    
+    @IBOutlet weak var sendBtnLbl: UIButton!
+    @IBAction func sendMessageBtn(sender: AnyObject) {
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        let theWidth = self.view.frame.width
+        let theHeight = self.view.frame.height
 
         // Do any additional setup after loading the view.
         
-        chatWithLabel.text = "Hi \(PFUser.currentUser().username), you are chatting with \(chattingWith)"
+        //UI Elements Set-up
+        self.title = otherName
+        
+        chatScrollView.frame = CGRectMake(0, 64, theWidth, theHeight-114)
+        chatScrollView.layer.zPosition = 20
+        //chatScrollView.backgroundColor = UIColor.grayColor()
+        
+        frameMessageView.frame = CGRectMake(0, chatScrollView.frame.maxY, theWidth, 50)
+        //frameMessageView.backgroundColor = UIColor.yellowColor()
+        
+        lineLabel.frame = CGRectMake(0, 0, theWidth, 1)
+        
+        textMessageView.frame = CGRectMake(2, 0, self.frameMessageView.frame.width-52, 48)
+        //textMessageView.backgroundColor = UIColor.redColor()
+        
+        sendBtnLbl.center = CGPointMake(frameMessageView.frame.width-30, 24)
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
