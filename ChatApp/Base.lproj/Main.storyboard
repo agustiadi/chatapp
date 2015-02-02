@@ -118,7 +118,13 @@
                             <outlet property="delegate" destination="6k9-F0-E0E" id="aMz-c1-AUp"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Users Table" id="kSA-YB-9fA"/>
+                    <navigationItem key="navigationItem" title="Users Table" id="kSA-YB-9fA">
+                        <barButtonItem key="rightBarButtonItem" title="Logout" id="kBS-G3-lHz">
+                            <connections>
+                                <action selector="logoutCurrentUser:" destination="6k9-F0-E0E" id="uP6-vO-DKr"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="szF-oY-WoL" userLabel="First Responder" sceneMemberID="firstResponder"/>

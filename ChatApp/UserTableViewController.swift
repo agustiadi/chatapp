@@ -80,7 +80,14 @@ class UserTableViewController: UITableViewController {
         return cell
     }
     
-
+    
+    @IBAction func logoutCurrentUser(sender: AnyObject) {
+        
+        PFUser.logOut()
+        println("You have been succesfully logged out!")
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
