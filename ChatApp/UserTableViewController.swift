@@ -11,6 +11,7 @@ import UIKit
 class UserTableViewController: UITableViewController {
 
     var name = [String]()
+    var email = [String]()
     var image = [PFFile]()
     
     override func viewDidLoad() {
@@ -26,8 +27,13 @@ class UserTableViewController: UITableViewController {
             if error == nil {
                 
                 for user in users {
-                    self.name.append(user.username)
-                    self.image.append(user["profilePic"] as PFFile)
+                    
+                    if user.email != PFUser.currentUser().email {
+                        self.name.append(user.username)
+                        self.email.append(user.email)
+                        self.image.append(user["profilePic"] as PFFile)
+                    }
+
                 }
                 self.tableView.reloadData()
             } else {
@@ -78,6 +84,11 @@ class UserTableViewController: UITableViewController {
         
         
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        chattingWith = email[indexPath.row]
+        performSegueWithIdentifier("chatRoom", sender: self)
     }
     
     
