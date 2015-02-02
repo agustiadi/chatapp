@@ -27,6 +27,11 @@ class ChatViewController: UIViewController {
     
         let theWidth = self.view.frame.width
         let theHeight = self.view.frame.height
+        
+        var scrollViewOriginalY: CGFloat = 0
+        var frameMessageOriginalY: CGFloat = 0
+        
+        let placeholderMsg = UILabel(frame: CGRectMake(5, 6, 200, 20))
 
         // Do any additional setup after loading the view.
         
@@ -35,19 +40,16 @@ class ChatViewController: UIViewController {
         
         chatScrollView.frame = CGRectMake(0, 64, theWidth, theHeight-114)
         chatScrollView.layer.zPosition = 20
-        //chatScrollView.backgroundColor = UIColor.grayColor()
-        
         frameMessageView.frame = CGRectMake(0, chatScrollView.frame.maxY, theWidth, 50)
-        //frameMessageView.backgroundColor = UIColor.yellowColor()
-        
         lineLabel.frame = CGRectMake(0, 0, theWidth, 1)
-        
         textMessageView.frame = CGRectMake(2, 0, self.frameMessageView.frame.width-52, 48)
-        //textMessageView.backgroundColor = UIColor.redColor()
-        
         sendBtnLbl.center = CGPointMake(frameMessageView.frame.width-30, 24)
         
+        scrollViewOriginalY = self.chatScrollView.frame.origin.y
+        frameMessageOriginalY = self.frameMessageView.frame.origin.y
         
+        placeholderMsg.text = "Type a message ....."
+        textMessageView.addSubview(placeholderMsg)
     }
 
     override func didReceiveMemoryWarning() {
