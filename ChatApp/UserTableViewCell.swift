@@ -20,6 +20,7 @@ class UserTableViewCell: UITableViewCell {
         
         profileImage.layer.cornerRadius = profileImage.bounds.width/2
         profileImage.clipsToBounds = true
+        //profileImage.contentMode = UIViewContentMode.ScaleAspectFit
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
