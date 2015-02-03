@@ -96,6 +96,48 @@ class ChatViewController: UIViewController, UIScrollViewDelegate {
                     self.messageArray.append(object["message"] as String)
                 }
                 
+                for var i=0; i <= self.senderArray.count-1; i++ {
+                    
+                    if self.senderArray[i] == PFUser.currentUser().email{
+                        
+                        var messageLbl = UILabel(frame: CGRectMake(0, 0, self.chatScrollView.frame.width-94, CGFloat.max))
+                        messageLbl.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                        messageLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                        messageLbl.textAlignment = NSTextAlignment.Left
+                        messageLbl.numberOfLines = 0
+                        messageLbl.font = UIFont(name: "Helvetica Neuse", size: 17)
+                        messageLbl.textColor = UIColor.blackColor()
+                        messageLbl.text = self.messageArray[i]
+                        messageLbl.sizeToFit()
+                        messageLbl.layer.zPosition = 20
+                        messageLbl.frame.origin.x = self.chatScrollView.frame.width - self.messageX - messageLbl.frame.size.width
+                        messageLbl.frame.origin.y = self.messageY
+                        self.chatScrollView.addSubview(messageLbl)
+                        self.messageY += messageLbl.frame.height + 30
+                        self.chatScrollView.contentSize = CGSizeMake(theWidth, self.messageY)
+                        
+                    } else {
+                        
+                        var messageLbl = UILabel(frame: CGRectMake(0, 0, self.chatScrollView.frame.width-94, CGFloat.max))
+                        messageLbl.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                        messageLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                        messageLbl.textAlignment = NSTextAlignment.Left
+                        messageLbl.numberOfLines = 0
+                        messageLbl.font = UIFont(name: "Helvetica Neuse", size: 17)
+                        messageLbl.textColor = UIColor.blackColor()
+                        messageLbl.text = self.messageArray[i]
+                        messageLbl.sizeToFit()
+                        messageLbl.layer.zPosition = 20
+                        messageLbl.frame.origin.x = self.messageX
+                        messageLbl.frame.origin.y = self.messageY
+                        self.chatScrollView.addSubview(messageLbl)
+                        self.messageY += messageLbl.frame.height + 30
+                        self.chatScrollView.contentSize = CGSizeMake(theWidth, self.messageY)
+
+                    }
+                    
+                }
+                
             }else {
                 println(error)
             }
