@@ -42,11 +42,7 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        for subview in self.chatScrollView.subviews {
-            subview.removeFromSuperview()
-        }
-        
+
         var refreshButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Refresh, target: self, action: "refresh")
         
         let theWidth = self.view.frame.width
