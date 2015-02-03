@@ -91,6 +91,31 @@ class UserTableViewController: UITableViewController {
         var cell = tableView.cellForRowAtIndexPath(indexPath) as UserTableViewCell
         otherName = name[indexPath.row]
         otherEmail = email[indexPath.row]
+        
+        let imageFile = image[indexPath.row]
+        imageFile.getDataInBackgroundWithBlock{
+            (imageData: NSData!, error: NSError!) -> Void in
+            
+            if error == nil {
+                let image = UIImage(data: imageData)
+                otherImg = image
+            }else {
+                println(error)
+            }
+        }
+        
+        let imageFile2: PFFile = PFUser.currentUser()["profilePic"] as PFFile
+        imageFile2.getDataInBackgroundWithBlock{
+            (imageData: NSData!, error: NSError!) -> Void in
+            
+            if error == nil {
+                let image = UIImage(data: imageData)
+                myImg = image
+            }else {
+                println(error)
+            }
+        }
+        
         self.performSegueWithIdentifier("chatRoom", sender: self)
     }
     

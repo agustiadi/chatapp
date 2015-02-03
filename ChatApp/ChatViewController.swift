@@ -10,9 +10,13 @@ import UIKit
 
 var otherName: String = ""
 var otherEmail: String = ""
+var myImg: UIImage? = UIImage()
+var otherImg: UIImage? = UIImage()
+
 
 class ChatViewController: UIViewController, UIScrollViewDelegate {
 
+    
     @IBOutlet weak var chatScrollView: UIScrollView!
     @IBOutlet weak var lineLabel: UILabel!
     @IBOutlet weak var frameMessageView: UIView!
@@ -27,12 +31,18 @@ class ChatViewController: UIViewController, UIScrollViewDelegate {
     
     var messageX: CGFloat = 37.0
     var messageY: CGFloat = 26.0
+    var frameX: CGFloat = 32.0
+    var frameY: CGFloat = 21.0
+    var imageX: CGFloat = 3.0
+    var imageY: CGFloat = 3.0
     
     var senderArray = [String]()
     var messageArray = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var refreshButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Refresh, target: self, action: "refresh")
     
         let theWidth = self.view.frame.width
         let theHeight = self.view.frame.height
@@ -58,6 +68,18 @@ class ChatViewController: UIViewController, UIScrollViewDelegate {
         placeholderMsg.textColor = UIColor.lightGrayColor()
         textMessageView.addSubview(placeholderMsg)
         
+        self.navigationItem.setRightBarButtonItem(refreshButton, animated: false)
+
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        
+        refreshResult()
+        
+    }
+    
+    func refresh(){
+        
         refreshResult()
         
     }
@@ -74,6 +96,10 @@ class ChatViewController: UIViewController, UIScrollViewDelegate {
         
         messageX = 37.0
         messageY = 26.0
+        frameX = 32.0
+        frameY = 21.0
+        imageX = 3.0
+        imageY = 3.0
         
         messageArray.removeAll(keepCapacity: false)
         senderArray.removeAll(keepCapacity: false)
@@ -96,6 +122,10 @@ class ChatViewController: UIViewController, UIScrollViewDelegate {
                     self.messageArray.append(object["message"] as String)
                 }
                 
+                for subView in self.chatScrollView.subviews {
+                    subView.removeFromSuperview()
+                }
+                
                 for var i=0; i <= self.senderArray.count-1; i++ {
                     
                     if self.senderArray[i] == PFUser.currentUser().email{
@@ -114,6 +144,29 @@ class ChatViewController: UIViewController, UIScrollViewDelegate {
                         messageLbl.frame.origin.y = self.messageY
                         self.chatScrollView.addSubview(messageLbl)
                         self.messageY += messageLbl.frame.height + 30
+                        
+                        var frameLbl: UILabel = UILabel()
+                        frameLbl.frame.size = CGSizeMake(messageLbl.frame.width+10, messageLbl.frame.height+10)
+                        frameLbl.frame.origin.x = self.chatScrollView.frame.width - self.frameX - frameLbl.frame.size.width
+                        frameLbl.frame.origin.y = self.frameY
+                        frameLbl.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                        frameLbl.layer.masksToBounds = true
+                        frameLbl.layer.cornerRadius = 10
+                        self.chatScrollView.addSubview(frameLbl)
+                        self.frameY += frameLbl.frame.height + 20
+                        
+                        var img: UIImageView = UIImageView()
+                        img.image = UIImage(named: "mickey")
+                        img.frame.size = CGSizeMake(34, 34)
+                        img.frame.origin.x = self.chatScrollView.frame.width - self.imageX - img.frame.width
+                        img.frame.origin.y = self.imageY
+                        img.layer.zPosition = 30
+                        img.layer.cornerRadius = img.frame.width/2
+                        img.clipsToBounds = true
+                        img.image = myImg
+                        self.chatScrollView.addSubview(img)
+                        self.imageY += frameLbl.frame.height + 20
+                        
                         self.chatScrollView.contentSize = CGSizeMake(theWidth, self.messageY)
                         
                     } else {
@@ -132,10 +185,31 @@ class ChatViewController: UIViewController, UIScrollViewDelegate {
                         messageLbl.frame.origin.y = self.messageY
                         self.chatScrollView.addSubview(messageLbl)
                         self.messageY += messageLbl.frame.height + 30
+                        
+                        var frameLbl: UILabel = UILabel()
+                        frameLbl.frame = CGRectMake(self.frameX, self.frameY, messageLbl.frame.width + 10, messageLbl.frame.height + 10)
+                        frameLbl.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                        frameLbl.layer.masksToBounds = true
+                        frameLbl.layer.cornerRadius = 10
+                        self.chatScrollView.addSubview(frameLbl)
+                        self.frameY += frameLbl.frame.height + 20
+                        
+                        var img: UIImageView = UIImageView()
+                        img.image = UIImage(named: "mickey")
+                        img.frame = CGRectMake(self.imageX, self.imageY, 34, 34)
+                        img.layer.zPosition = 30
+                        img.layer.cornerRadius = img.frame.width/2
+                        img.clipsToBounds = true
+                        img.image = otherImg
+                        self.chatScrollView.addSubview(img)
+                        self.imageY += frameLbl.frame.height + 20
+                        
                         self.chatScrollView.contentSize = CGSizeMake(theWidth, self.messageY)
 
                     }
                     
+                    var bottomOffset: CGPoint = CGPointMake(0, self.chatScrollView.contentSize.height - self.chatScrollView.bounds.size.height)
+                    self.chatScrollView.setContentOffset(bottomOffset, animated: false)
                 }
                 
             }else {
