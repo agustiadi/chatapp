@@ -76,10 +76,11 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
         
-        for subView in self.chatScrollView.subviews {
-            subView.removeFromSuperview()
-        }
+        var timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: Selector("refresh"), userInfo: nil, repeats: true)
+
     }
+    
+    
     
     func didTapScrollView() {
         
