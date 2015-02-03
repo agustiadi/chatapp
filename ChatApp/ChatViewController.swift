@@ -73,10 +73,10 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
         tapScrollViewGesture.numberOfTapsRequired = 1
         chatScrollView.addGestureRecognizer(tapScrollViewGesture)
         
+        var timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: Selector("refresh"), userInfo: nil, repeats: true)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
-        
-        var timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: Selector("refresh"), userInfo: nil, repeats: true)
 
     }
     
@@ -108,50 +108,8 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
         }
     }
     
-    func keyboardWasShown(notification: NSNotification){
-        
-        let dict: NSDictionary = notification.userInfo!
-        let s: NSValue = dict.valueForKey(UIKeyboardFrameEndUserInfoKey) as NSValue
-        let rect: CGRect = s.CGRectValue()
-        
-        UIView.animateWithDuration(0.1, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: {
-            
-            self.chatScrollView.frame.origin.y = self.scrollViewOriginalY - rect.height
-            self.frameMessageView.frame.origin.y = self.frameMessageOriginalY - rect.height
-            
-            var bottomOffset: CGPoint = CGPointMake(0, self.chatScrollView.contentSize.height - self.chatScrollView.bounds.size.height)
-            self.chatScrollView.setContentOffset(bottomOffset, animated: false)
-            
-            }, completion: {
-                (finished: Bool) in
-        })
-    }
-    
-    func keyboardWillHide(notification: NSNotification){
-        
-        let dict: NSDictionary = notification.userInfo!
-        let s: NSValue = dict.valueForKey(UIKeyboardFrameEndUserInfoKey) as NSValue
-        let rect: CGRect = s.CGRectValue()
-        
-        UIView.animateWithDuration(0.1, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: {
-            
-            self.chatScrollView.frame.origin.y = self.scrollViewOriginalY
-            self.frameMessageView.frame.origin.y = self.frameMessageOriginalY
-            
-            var bottomOffset: CGPoint = CGPointMake(0, self.chatScrollView.contentSize.height - self.chatScrollView.bounds.size.height)
-            self.chatScrollView.setContentOffset(bottomOffset, animated: false)
-            
-            }, completion: {
-                (finished: Bool) in
-        })
-        
-        
-    }
     
     override func viewDidAppear(animated: Bool) {
-        
-        scrollViewOriginalY = self.chatScrollView.frame.origin.y
-        frameMessageOriginalY = self.frameMessageView.frame.origin.y
         
         refreshResult()
         
@@ -169,6 +127,7 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
     }
     
     func refreshResult(){
+        
         
         let theWidth = view.frame.size.width
         let theHeight = view.frame.size.height
@@ -289,7 +248,6 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
                     
                     var bottomOffset: CGPoint = CGPointMake(0, self.chatScrollView.contentSize.height - self.chatScrollView.bounds.size.height)
                     self.chatScrollView.setContentOffset(bottomOffset, animated: false)
-                    
                 
                 }
                 
@@ -326,6 +284,47 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
         
         self.view.endEditing(true)
     }
+    
+    func keyboardWasShown(notification: NSNotification){
+        
+        let dict: NSDictionary = notification.userInfo!
+        let s: NSValue = dict.valueForKey(UIKeyboardFrameEndUserInfoKey) as NSValue
+        let rect: CGRect = s.CGRectValue()
+        
+        UIView.animateWithDuration(0.1, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: {
+            
+            self.chatScrollView.frame.origin.y = self.scrollViewOriginalY - rect.height
+            self.frameMessageView.frame.origin.y = self.frameMessageOriginalY - rect.height
+            
+            var bottomOffset: CGPoint = CGPointMake(0, self.chatScrollView.contentSize.height - self.chatScrollView.bounds.size.height)
+            self.chatScrollView.setContentOffset(bottomOffset, animated: false)
+            
+            }, completion: {
+                (finished: Bool) in
+        })
+    }
+    
+    func keyboardWillHide(notification: NSNotification){
+        
+        let dict: NSDictionary = notification.userInfo!
+        let s: NSValue = dict.valueForKey(UIKeyboardFrameEndUserInfoKey) as NSValue
+        let rect: CGRect = s.CGRectValue()
+        
+        UIView.animateWithDuration(0.1, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: {
+            
+            self.chatScrollView.frame.origin.y = self.scrollViewOriginalY
+            self.frameMessageView.frame.origin.y = self.frameMessageOriginalY
+            
+            var bottomOffset: CGPoint = CGPointMake(0, self.chatScrollView.contentSize.height - self.chatScrollView.bounds.size.height)
+            self.chatScrollView.setContentOffset(bottomOffset, animated: false)
+            
+            }, completion: {
+                (finished: Bool) in
+        })
+        
+        
+    }
+
 
     
     
