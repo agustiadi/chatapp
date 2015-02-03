@@ -43,6 +43,10 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        for subview in self.chatScrollView.subviews {
+            subview.removeFromSuperview()
+        }
+        
         var refreshButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Refresh, target: self, action: "refresh")
         
         let theWidth = self.view.frame.width
@@ -76,6 +80,9 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
         
+        for subView in self.chatScrollView.subviews {
+            subView.removeFromSuperview()
+        }
     }
     
     func didTapScrollView() {
@@ -197,8 +204,8 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
                     self.messageArray.append(object["message"] as String)
                 }
                 
-                for subView in self.chatScrollView.subviews {
-                    subView.removeFromSuperview()
+                for subview in self.chatScrollView.subviews {
+                    subview.removeFromSuperview()
                 }
                 
                 for var i=0; i <= self.senderArray.count-1; i++ {

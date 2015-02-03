@@ -17,6 +17,13 @@ class UserTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        queryUserBase()
+
+    }
+    
+    
+    func queryUserBase(){
+        
         var userQuery = PFQuery(className: "_User")
         userQuery.findObjectsInBackgroundWithBlock({
             (users: [AnyObject]!, error: NSError!) -> Void in
@@ -33,15 +40,17 @@ class UserTableViewController: UITableViewController {
                         self.email.append(user.email)
                         self.image.append(user["profilePic"] as PFFile)
                     }
-
+                    
                 }
                 self.tableView.reloadData()
             } else {
                 println(error)
             }
-
+            
         })
-
+        
+        self.refreshControl?.endRefreshing()
+        
     }
 
     override func didReceiveMemoryWarning() {
