@@ -13,9 +13,7 @@ var otherEmail: String = ""
 var myImg: UIImage? = UIImage()
 var otherImg: UIImage? = UIImage()
 
-
 class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDelegate {
-
     
     @IBOutlet weak var chatScrollView: UIScrollView!
     @IBOutlet weak var lineLabel: UILabel!
@@ -37,13 +35,13 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
     
     var senderArray = [String]()
     var messageArray = [String]()
-    
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         var refreshButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Refresh, target: self, action: "refresh")
+        
+        var timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: Selector("refresh"), userInfo: nil, repeats: true)
         
         let theWidth = self.view.frame.width
         let theHeight = self.view.frame.height
@@ -72,8 +70,6 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
         let tapScrollViewGesture = UITapGestureRecognizer(target: self, action: "didTapScrollView")
         tapScrollViewGesture.numberOfTapsRequired = 1
         chatScrollView.addGestureRecognizer(tapScrollViewGesture)
-        
-        var timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: Selector("refresh"), userInfo: nil, repeats: true)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
@@ -142,120 +138,126 @@ class ChatViewController: UIViewController, UIScrollViewDelegate, UITextViewDele
         messageArray.removeAll(keepCapacity: false)
         senderArray.removeAll(keepCapacity: false)
         
-        let innerP1 = NSPredicate(format: "sender = %@ AND other = %@", PFUser.currentUser().email, otherEmail)
-        let innerQ1: PFQuery = PFQuery(className: "Messages", predicate: innerP1)
-        
-        let innerP2 = NSPredicate(format: "sender = %@ AND other = %@", otherEmail, PFUser.currentUser().email)
-        let innerQ2: PFQuery = PFQuery(className: "Messages", predicate: innerP2)
-        
-        var query = PFQuery.orQueryWithSubqueries([innerQ1, innerQ2])
-        query.addAscendingOrder("createdAt")
-        query.findObjectsInBackgroundWithBlock({
-            (objects: [AnyObject]!, error: NSError!) -> Void in
+        if PFUser.currentUser() != nil {
             
-            if error == nil{
+            let innerP1 = NSPredicate(format: "sender = %@ AND other = %@", PFUser.currentUser().email, otherEmail)
+            let innerQ1: PFQuery = PFQuery(className: "Messages", predicate: innerP1)
+            
+            let innerP2 = NSPredicate(format: "sender = %@ AND other = %@", otherEmail, PFUser.currentUser().email)
+            let innerQ2: PFQuery = PFQuery(className: "Messages", predicate: innerP2)
+            
+            var query = PFQuery.orQueryWithSubqueries([innerQ1, innerQ2])
+            query.addAscendingOrder("createdAt")
+            query.findObjectsInBackgroundWithBlock({
+                (objects: [AnyObject]!, error: NSError!) -> Void in
                 
-                for object in objects {
-                    self.senderArray.append(object["sender"] as String)
-                    self.messageArray.append(object["message"] as String)
-                }
-                
-                for subview in self.chatScrollView.subviews {
-                    subview.removeFromSuperview()
-                }
-                
-                for var i=0; i <= self.senderArray.count-1; i++ {
+                if error == nil{
                     
-                    if self.senderArray[i] == PFUser.currentUser().email{
-                        
-                        var messageLbl = UILabel(frame: CGRectMake(0, 0, self.chatScrollView.frame.width-94, CGFloat.max))
-                        messageLbl.backgroundColor = UIColor.clearColor()
-                        messageLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
-                        messageLbl.textAlignment = NSTextAlignment.Left
-                        messageLbl.numberOfLines = 0
-                        messageLbl.font = UIFont(name: "Helvetica Neuse", size: 17)
-                        messageLbl.textColor = UIColor.whiteColor()
-                        messageLbl.text = self.messageArray[i]
-                        messageLbl.sizeToFit()
-                        messageLbl.layer.zPosition = 20
-                        messageLbl.frame.origin.x = self.chatScrollView.frame.size.width - self.messageX - messageLbl.frame.size.width
-                        messageLbl.frame.origin.y = self.messageY
-                        self.chatScrollView.addSubview(messageLbl)
-                        self.messageY += messageLbl.frame.size.height + 30
-                        
-                        var frameLbl: UILabel = UILabel()
-                        frameLbl.frame.size = CGSizeMake(messageLbl.frame.width+10, messageLbl.frame.height+10)
-                        frameLbl.frame.origin.x = self.chatScrollView.frame.size.width - self.frameX - frameLbl.frame.size.width
-                        frameLbl.frame.origin.y = self.frameY
-                        frameLbl.backgroundColor = UIColor.greenColor()
-                        frameLbl.layer.masksToBounds = true
-                        frameLbl.layer.cornerRadius = 10
-                        self.chatScrollView.addSubview(frameLbl)
-                        self.frameY += frameLbl.frame.size.height + 20
-                        
-                        var img: UIImageView = UIImageView()
-                        img.image = UIImage(named: "mickey")
-                        img.frame.size = CGSizeMake(34, 34)
-                        img.frame.origin.x = self.chatScrollView.frame.size.width - self.imageX - img.frame.size.width
-                        img.frame.origin.y = self.imageY
-                        img.layer.zPosition = 30
-                        img.layer.cornerRadius = img.frame.width/2
-                        img.clipsToBounds = true
-                        img.image = myImg
-                        self.chatScrollView.addSubview(img)
-                        self.imageY += frameLbl.frame.size.height + 20
-                        
-                        self.chatScrollView.contentSize = CGSizeMake(theWidth, self.messageY)
-                        
-                    } else {
-                        
-                        var messageLbl = UILabel(frame: CGRectMake(0, 0, self.chatScrollView.frame.width-94, CGFloat.max))
-                        messageLbl.backgroundColor = UIColor.groupTableViewBackgroundColor()
-                        messageLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
-                        messageLbl.textAlignment = NSTextAlignment.Left
-                        messageLbl.numberOfLines = 0
-                        messageLbl.font = UIFont(name: "Helvetica Neuse", size: 17)
-                        messageLbl.textColor = UIColor.blackColor()
-                        messageLbl.text = self.messageArray[i]
-                        messageLbl.sizeToFit()
-                        messageLbl.layer.zPosition = 20
-                        messageLbl.frame.origin.x = self.messageX
-                        messageLbl.frame.origin.y = self.messageY
-                        self.chatScrollView.addSubview(messageLbl)
-                        self.messageY += messageLbl.frame.size.height + 30
-                        
-                        var frameLbl: UILabel = UILabel()
-                        frameLbl.frame = CGRectMake(self.frameX, self.frameY, messageLbl.frame.size.width + 10, messageLbl.frame.size.height + 10)
-                        frameLbl.backgroundColor = UIColor.groupTableViewBackgroundColor()
-                        frameLbl.layer.masksToBounds = true
-                        frameLbl.layer.cornerRadius = 10
-                        self.chatScrollView.addSubview(frameLbl)
-                        self.frameY += frameLbl.frame.size.height + 20
-                        
-                        var img: UIImageView = UIImageView()
-                        img.image = UIImage(named: "mickey")
-                        img.frame = CGRectMake(self.imageX, self.imageY, 34, 34)
-                        img.layer.zPosition = 30
-                        img.layer.cornerRadius = img.frame.width/2
-                        img.clipsToBounds = true
-                        img.image = otherImg
-                        self.chatScrollView.addSubview(img)
-                        self.imageY += frameLbl.frame.size.height + 20
-                        
-                        self.chatScrollView.contentSize = CGSizeMake(theWidth, self.messageY)
-
+                    for object in objects {
+                        self.senderArray.append(object["sender"] as String)
+                        self.messageArray.append(object["message"] as String)
                     }
                     
-                    var bottomOffset: CGPoint = CGPointMake(0, self.chatScrollView.contentSize.height - self.chatScrollView.bounds.size.height)
-                    self.chatScrollView.setContentOffset(bottomOffset, animated: false)
-                
+                    for subview in self.chatScrollView.subviews {
+                        subview.removeFromSuperview()
+                    }
+                    
+                    for var i=0; i <= self.senderArray.count-1; i++ {
+                        
+                        if self.senderArray[i] == PFUser.currentUser().email{
+                            
+                            var messageLbl = UILabel(frame: CGRectMake(0, 0, self.chatScrollView.frame.width-94, CGFloat.max))
+                            messageLbl.backgroundColor = UIColor.clearColor()
+                            messageLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                            messageLbl.textAlignment = NSTextAlignment.Left
+                            messageLbl.numberOfLines = 0
+                            messageLbl.font = UIFont(name: "Helvetica Neuse", size: 17)
+                            messageLbl.textColor = UIColor.whiteColor()
+                            messageLbl.text = self.messageArray[i]
+                            messageLbl.sizeToFit()
+                            messageLbl.layer.zPosition = 20
+                            messageLbl.frame.origin.x = self.chatScrollView.frame.size.width - self.messageX - messageLbl.frame.size.width
+                            messageLbl.frame.origin.y = self.messageY
+                            self.chatScrollView.addSubview(messageLbl)
+                            self.messageY += messageLbl.frame.size.height + 30
+                            
+                            var frameLbl: UILabel = UILabel()
+                            frameLbl.frame.size = CGSizeMake(messageLbl.frame.width+10, messageLbl.frame.height+10)
+                            frameLbl.frame.origin.x = self.chatScrollView.frame.size.width - self.frameX - frameLbl.frame.size.width
+                            frameLbl.frame.origin.y = self.frameY
+                            frameLbl.backgroundColor = UIColor.greenColor()
+                            frameLbl.layer.masksToBounds = true
+                            frameLbl.layer.cornerRadius = 10
+                            self.chatScrollView.addSubview(frameLbl)
+                            self.frameY += frameLbl.frame.size.height + 20
+                            
+                            var img: UIImageView = UIImageView()
+                            img.image = UIImage(named: "mickey")
+                            img.frame.size = CGSizeMake(34, 34)
+                            img.frame.origin.x = self.chatScrollView.frame.size.width - self.imageX - img.frame.size.width
+                            img.frame.origin.y = self.imageY
+                            img.layer.zPosition = 30
+                            img.layer.cornerRadius = img.frame.width/2
+                            img.clipsToBounds = true
+                            img.image = myImg
+                            self.chatScrollView.addSubview(img)
+                            self.imageY += frameLbl.frame.size.height + 20
+                            
+                            self.chatScrollView.contentSize = CGSizeMake(theWidth, self.messageY)
+                            
+                        } else {
+                            
+                            var messageLbl = UILabel(frame: CGRectMake(0, 0, self.chatScrollView.frame.width-94, CGFloat.max))
+                            messageLbl.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                            messageLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                            messageLbl.textAlignment = NSTextAlignment.Left
+                            messageLbl.numberOfLines = 0
+                            messageLbl.font = UIFont(name: "Helvetica Neuse", size: 17)
+                            messageLbl.textColor = UIColor.blackColor()
+                            messageLbl.text = self.messageArray[i]
+                            messageLbl.sizeToFit()
+                            messageLbl.layer.zPosition = 20
+                            messageLbl.frame.origin.x = self.messageX
+                            messageLbl.frame.origin.y = self.messageY
+                            self.chatScrollView.addSubview(messageLbl)
+                            self.messageY += messageLbl.frame.size.height + 30
+                            
+                            var frameLbl: UILabel = UILabel()
+                            frameLbl.frame = CGRectMake(self.frameX, self.frameY, messageLbl.frame.size.width + 10, messageLbl.frame.size.height + 10)
+                            frameLbl.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                            frameLbl.layer.masksToBounds = true
+                            frameLbl.layer.cornerRadius = 10
+                            self.chatScrollView.addSubview(frameLbl)
+                            self.frameY += frameLbl.frame.size.height + 20
+                            
+                            var img: UIImageView = UIImageView()
+                            img.image = UIImage(named: "mickey")
+                            img.frame = CGRectMake(self.imageX, self.imageY, 34, 34)
+                            img.layer.zPosition = 30
+                            img.layer.cornerRadius = img.frame.width/2
+                            img.clipsToBounds = true
+                            img.image = otherImg
+                            self.chatScrollView.addSubview(img)
+                            self.imageY += frameLbl.frame.size.height + 20
+                            
+                            self.chatScrollView.contentSize = CGSizeMake(theWidth, self.messageY)
+                            
+                        }
+                        
+                        var bottomOffset: CGPoint = CGPointMake(0, self.chatScrollView.contentSize.height - self.chatScrollView.bounds.size.height)
+                        self.chatScrollView.setContentOffset(bottomOffset, animated: false)
+                        
+                    }
+                    
+                }else {
+                    println(error)
                 }
-                
-            }else {
-                println(error)
+            })
+
+            
+        }
+        
             }
-        })
-    }
     
     @IBAction func sendMessageBtn(sender: AnyObject) {
 

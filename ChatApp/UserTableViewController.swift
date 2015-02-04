@@ -14,13 +14,13 @@ class UserTableViewController: UITableViewController {
     var email = [String]()
     var image = [PFFile]()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         queryUserBase()
 
     }
-    
     
     func queryUserBase(){
         
